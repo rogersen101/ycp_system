@@ -1,0 +1,77 @@
+{% extends "base/base.html" %}
+
+{% block title %}{{ page_title }} | YCP{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+
+                    <h1 class="h3 fw-bold">{{ page_title }}</h1>
+                    <p class="text-muted">{{ activity.title }}</p>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        {% for field in form %}
+                            <div class="mb-3">
+                                {% if field.field.widget.input_type == "checkbox" %}
+                                    <div class="form-check">
+                                        {{ field }}
+                                        <label
+                                            class="form-check-label"
+                                            for="{{ field.id_for_label }}"
+                                        >
+                                            {{ field.label }}
+                                        </label>
+                                    </div>
+                                {% else %}
+                                    <label
+                                        class="form-label fw-semibold"
+                                        for="{{ field.id_for_label }}"
+                                    >
+                                        {{ field.label }}
+                                    </label>
+                                    {{ field }}
+                                {% endif %}
+
+                                {% if field.help_text %}
+                                    <div class="form-text">{{ field.help_text }}</div>
+                                {% endif %}
+
+                                {% for error in field.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                Save Material
+                            </button>
+
+                            <a
+                                href="{% url 'learning:manage_materials' activity.slug %}"
+                                class="btn btn-outline-secondary"
+                            >
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

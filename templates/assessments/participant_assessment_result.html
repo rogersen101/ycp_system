@@ -1,0 +1,95 @@
+
+{% extends "base/base.html" %}
+
+{% block title %}Assessment Result | YouthConnect{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2>Assessment submitted</h2>
+    <h4 class="mt-3">{{ assessment.title }}</h4>
+
+    <div class="card my-4">
+        <div class="card-body">
+            <p>
+                <strong>Attempt:</strong>
+                {{ attempt.attempt_number }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                {{ attempt.get_status_display }}
+            </p>
+
+            {% if show_results %}
+                <p>
+                    <strong>Score:</strong>
+                    {{ attempt.score }} / {{ attempt.total_marks }}
+                </p>
+
+                {% if attempt.percentage != None %}
+                    <p>
+                        <strong>Percentage:</strong>
+                        {{ attempt.percentage|floatformat:1 }}%
+                    </p>
+                {% endif %}
+
+                {% if attempt.passed is not None %}
+                    {% if attempt.passed %}
+                        <span class="badge bg-success">Passed</span>
+                    {% else %}
+                        <span class="badge bg-danger">Not passed</span>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <div class="alert alert-info">
+                    Your submission has been received. Results will be
+                    available when the facilitator releases them.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if show_results %}
+        <h4 class="mb-3">Your responses</h4>
+
+        {% for answer in answers %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h6>{{ forloop.counter }}. {{ answer.question.text }}</h6>
+
+                    {% if answer.selected_option %}
+                        <p>
+                            <strong>Your answer:</strong>
+                            {{ answer.selected_option.text }}
+                        </p>
+                    {% else %}
+                        <p>
+                            <strong>Your answer:</strong>
+                            {{ answer.text_answer|default:"No answer provided" }}
+                        </p>
+                    {% endif %}
+
+                    {% if attempt.status == "graded" %}
+                        <p>
+                            <strong>Marks awarded:</strong>
+                            {{ answer.awarded_marks }}
+                        </p>
+
+                        {% if answer.marker_feedback %}
+                            <p>
+                                <strong>Feedback:</strong>
+                                {{ answer.marker_feedback }}
+                            </p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <a href="{% url 'assessments:participant_assessment_list' assessment.activity.slug %}"
+       class="btn btn-primary">
+        Back to Assessments
+    </a>
+</div>
+{% endblock %}

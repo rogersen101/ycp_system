@@ -1,0 +1,67 @@
+
+{% extends "base/base.html" %}
+
+{% block title %}Assessments | YouthConnect{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="mb-4">
+        <a href="{% url 'learning:activity_detail' activity.slug %}"
+           class="btn btn-outline-secondary btn-sm mb-3">
+            &larr; Back to activity
+        </a>
+
+        <h2>{{ activity.title }}</h2>
+        <p class="text-muted">Available assessments</p>
+    </div>
+
+    {% for assessment in assessments %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ assessment.title }}</h5>
+
+                {% if assessment.description %}
+                    <p>{{ assessment.description }}</p>
+                {% endif %}
+
+                <div class="small text-muted mb-3">
+                    {% if assessment.time_limit %}
+                        <span class="me-3">
+                            Time limit: {{ assessment.time_limit }} minutes
+                        </span>
+                    {% endif %}
+
+                    <span class="me-3">
+                        Maximum attempts: {{ assessment.max_attempts }}
+                    </span>
+
+                    <span>
+                        Pass mark: {{ assessment.pass_mark }}%
+                    </span>
+                </div>
+
+                {% if assessment.available_from %}
+                    <p class="small">
+                        Opens: {{ assessment.available_from|date:"d M Y, H:i" }}
+                    </p>
+                {% endif %}
+
+                {% if assessment.available_until %}
+                    <p class="small">
+                        Closes: {{ assessment.available_until|date:"d M Y, H:i" }}
+                    </p>
+                {% endif %}
+
+                <a href="{% url 'assessments:assessment_start' assessment.id %}"
+                   class="btn btn-primary">
+                    Start / Continue
+                </a>
+            </div>
+        </div>
+    {% empty %}
+        <div class="alert alert-info">
+            No published assessments are available for this activity.
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

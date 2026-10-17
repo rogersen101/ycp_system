@@ -1,0 +1,45 @@
+{% extends "base/base.html" %}
+
+{% block title %}Delete Material | YCP{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+
+                    <h1 class="h4 fw-bold">Delete Learning Material</h1>
+
+                    <p>
+                        Are you sure you want to delete
+                        <strong>{{ material.title }}</strong>?
+                    </p>
+
+                    <p class="text-muted small">
+                        This action removes the material record.
+                    </p>
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <button type="submit" class="btn btn-danger">
+                            Confirm Delete
+                        </button>
+
+                        <a
+                            href="{% url 'learning:manage_materials' material.activity.slug %}"
+                            class="btn btn-outline-secondary"
+                        >
+                            Cancel
+                        </a>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

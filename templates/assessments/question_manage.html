@@ -1,0 +1,172 @@
+{% extends "base/base.html" %}
+
+{% block title %}Manage Questions | YCP{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h1 class="h3 fw-bold">Manage Questions</h1>
+        <p class="text-muted mb-1">{{ assessment.title }}</p>
+        <span class="badge text-bg-secondary">
+            {{ assessment.get_status_display }}
+        </span>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="h5 fw-bold mb-3">Add a question</h2>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ option_formset.management_form }}
+
+                        {% for field in question_form %}
+                            <div class="mb-3">
+                                <label
+                                    class="form-label"
+                                    for="{{ field.id_for_label }}"
+                                >
+                                    {{ field.label }}
+                                </label>
+
+                                {{ field }}
+
+                                {% for error in field.errors %}
+                                    <div class="text-danger small">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+
+                        <hr>
+
+                        <h3 class="h6 fw-bold">Answer options</h3>
+                        <p class="text-muted small">
+                            For multiple-choice and true/false questions,
+                            enter at least two options and mark exactly one correct.
+                            For written questions, leave options blank.
+                        </p>
+
+                        {% for option_form in option_formset %}
+                            <div class="border rounded p-3 mb-3">
+
+                                {% for hidden in option_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+
+                                {% for field in option_form.visible_fields %}
+                                    <div class="mb-2">
+
+                                        {% if field.field.widget.input_type == "checkbox" %}
+                                            <div class="form-check">
+                                                {{ field }}
+                                                <label
+                                                    class="form-check-label"
+                                                    for="{{ field.id_for_label }}"
+                                                >
+                                                    {{ field.label }}
+                                                </label>
+                                            </div>
+                                        {% else %}
+                                            <label
+                                                class="form-label"
+                                                for="{{ field.id_for_label }}"
+                                            >
+                                                {{ field.label }}
+                                            </label>
+                                            {{ field }}
+                                        {% endif %}
+
+                                        {% for error in field.errors %}
+                                            <div class="text-danger small">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        {% endfor %}
+
+                        {% for error in option_formset.non_form_errors %}
+                            <div class="alert alert-danger">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            Save Question
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+
+                    <h2 class="h5 fw-bold mb-3">Existing questions</h2>
+
+                    {% for question in questions %}
+                        <div class="border rounded p-3 mb-3">
+
+                            <div class="d-flex justify-content-between gap-2">
+                                <strong>
+                                    {{ forloop.counter }}. {{ question.text }}
+                                </strong>
+
+                                <span class="badge text-bg-light">
+                                    {{ question.marks }} mark{{ question.marks|pluralize }}
+                                </span>
+                            </div>
+
+                            <p class="text-muted small mb-2">
+                                {{ question.get_question_type_display }}
+                            </p>
+
+                            {% if question.options.exists %}
+                                <ul class="mb-0">
+                                    {% for option in question.options.all %}
+                                        <li>
+                                            {{ option.text }}
+                                            {% if option.is_correct %}
+                                                <span class="text-success fw-semibold">
+                                                    (Correct answer)
+                                                </span>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
+                        </div>
+                    {% empty %}
+                        <p class="text-muted">
+                            No questions have been added yet.
+                        </p>
+                    {% endfor %}
+
+                    <a
+                        href="{% url 'assessments:assessment_list' assessment.activity.slug %}"
+                        class="btn btn-outline-secondary"
+                    >
+                        Back to assessments
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

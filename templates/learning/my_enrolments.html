@@ -1,0 +1,140 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+My Enrolments | YouthConnect Platform
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">
+                My Enrolments
+            </h2>
+
+            <p class="text-muted mb-0">
+                Track the activities you have joined.
+            </p>
+        </div>
+
+        <a
+            href="{% url 'learning:activity_list' %}"
+            class="btn btn-primary"
+        >
+            <i class="bi bi-search me-2"></i>
+            Discover Activities
+        </a>
+    </div>
+
+
+    {% if enrolments %}
+
+        <div class="row g-4">
+
+            {% for enrolment in enrolments %}
+
+                <div class="col-md-6 col-lg-4">
+
+                    <div class="card h-100 shadow-sm border-0">
+
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between mb-2">
+
+                                {% if enrolment.status == "active" %}
+
+                                    <span class="badge bg-success">
+                                        Active
+                                    </span>
+
+                                {% elif enrolment.status == "completed" %}
+
+                                    <span class="badge bg-primary">
+                                        Completed
+                                    </span>
+
+                                {% elif enrolment.status == "withdrawn" %}
+
+                                    <span class="badge bg-secondary">
+                                        Withdrawn
+                                    </span>
+
+                                {% endif %}
+
+                                <small class="text-muted">
+                                    {{ enrolment.activity.level|title }}
+                                </small>
+
+                            </div>
+
+                            <h5 class="fw-bold">
+                                {{ enrolment.activity.title }}
+                            </h5>
+
+                            <p class="text-muted small">
+                                {{ enrolment.activity.category }}
+                            </p>
+
+                            <hr>
+
+                            <div class="small mb-2">
+                                <i class="bi bi-calendar3 me-2"></i>
+                                {{ enrolment.activity.start_date|date:"d M Y, H:i" }}
+                            </div>
+
+                            <div class="small mb-3">
+                                <i class="bi bi-person me-2"></i>
+                                {{ enrolment.activity.facilitator.full_name }}
+                            </div>
+
+                            <a
+                                href="{% url 'learning:activity_detail' enrolment.activity.slug %}"
+                                class="btn btn-outline-primary w-100"
+                            >
+                                View Activity
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <i class="bi bi-journal-bookmark display-4 text-muted"></i>
+
+                <h4 class="mt-3">
+                    No enrolments yet
+                </h4>
+
+                <p class="text-muted">
+                    Discover activities and enrol in one to begin your learning journey.
+                </p>
+
+                <a
+                    href="{% url 'learning:activity_list' %}"
+                    class="btn btn-primary"
+                >
+                    Discover Activities
+                </a>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

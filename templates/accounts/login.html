@@ -1,0 +1,140 @@
+{% extends "base/base.html" %}\n{% load static %}
+
+{% block title %}
+    Login | YouthConnect
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="ycp-card">
+
+                <div class="text-center mb-4">
+
+                    <img
+                        src="{% static 'images/logo.png' %}"
+                        alt="YCP — YouthConnect Platform logo"
+                        class="img-fluid mb-3"
+                        style="max-width: 190px; max-height: 120px; object-fit: contain;"
+                    />
+
+                    <h2 class="fw-bold mt-2">
+                        Welcome Back
+                    </h2>
+
+                    <p class="text-muted">
+                        Sign in to YouthConnect
+                    </p>
+
+                </div>
+
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+
+                    <div class="mb-3">
+
+                        <label
+                            for="email"
+                            class="form-label fw-semibold"
+                        >
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            placeholder="name@example.com"
+                            required
+                            autofocus
+                        >
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label
+                            for="password"
+                            class="form-label fw-semibold"
+                        >
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="d-flex justify-content-between mb-4">
+
+                        <div class="mt-2">
+    <a
+        href="{% url 'accounts:resend_verification' %}"
+        class="text-decoration-none" >
+        <i class="bi bi-envelope me-1"></i>
+        Resend verification email
+    </a>
+    <a
+    href="{% url 'accounts:password_reset' %}"
+    class="text-decoration-none"
+>
+    <i class="bi bi-key me-1"></i>
+    Forgot password?
+</a>
+</div>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100 py-2"
+                    >
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        Login
+                    </button>
+
+                </form>
+
+
+                <div class="text-center mt-4">
+
+                    <p class="text-muted mb-0">
+
+                        Don't have an account?
+
+                        <a href="{% url 'accounts:register' %}">
+                            Create an account
+                        </a>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

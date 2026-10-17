@@ -1,0 +1,301 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+    Dashboard | YouthConnect
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+                Welcome to YouthConnect
+            </h2>
+
+            <p class="text-muted mb-0">
+                Your learning and collaborative project platform.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Welcome Card -->
+
+    <div class="ycp-card mb-4">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <h4 class="fw-bold">
+                    Welcome, {{ user.full_name }}
+                </h4>
+
+                <p class="text-muted mb-0">
+
+                    You are signed in as
+
+                    <strong>
+                        {{ user.get_role_display }}
+                    </strong>.
+
+                </p>
+
+            </div>
+
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+
+                <span class="badge text-bg-primary px-3 py-2">
+
+                    <i class="bi bi-person-check me-1"></i>
+
+                    {{ user.get_role_display }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Dashboard Cards -->
+
+    <div class="row g-4">
+
+        <!-- Learning -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="ycp-card h-100">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <p class="text-muted mb-1">
+                            Learning
+                        </p>
+
+                        <h3 class="fw-bold">
+                            1
+                        </h3>
+
+                    </div>
+
+                    <i class="bi bi-book fs-1 text-primary"></i>
+
+                </div>
+
+                <small class="text-muted">
+                    Activities enrolled
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- Assessments -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="ycp-card h-100">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <p class="text-muted mb-1">
+                            Assessments
+                        </p>
+
+                        <h3 class="fw-bold">
+                            0
+                        </h3>
+
+                    </div>
+
+                    <i class="bi bi-clipboard-check fs-1 text-success"></i>
+
+                </div>
+
+                <small class="text-muted">
+                    Assessments completed
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- Teams -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="ycp-card h-100">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <p class="text-muted mb-1">
+                            Teams
+                        </p>
+
+                        <h3 class="fw-bold">
+                            0
+                        </h3>
+
+                    </div>
+
+                    <i class="bi bi-people fs-1 text-warning"></i>
+
+                </div>
+
+                <small class="text-muted">
+                    Teams joined
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- Projects -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="ycp-card h-100">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <p class="text-muted mb-1">
+                            Projects
+                        </p>
+
+                        <h3 class="fw-bold">
+                            0
+                        </h3>
+
+                    </div>
+
+                    <i class="bi bi-kanban fs-1 text-danger"></i>
+
+                </div>
+
+                <small class="text-muted">
+                    Active projects
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Getting Started -->
+
+    <div class="row mt-4">
+
+        <div class="col-lg-8">
+
+            <div class="ycp-card">
+
+                <h5 class="fw-bold mb-3">
+                    Getting Started
+                </h5>
+
+                <div class="list-group list-group-flush">
+
+                    <div class="list-group-item px-0">
+
+                        <i class="bi bi-person-vcard me-2"></i>
+
+                        Complete your profile
+
+                    </div>
+
+                    <div class="list-group-item px-0">
+
+                        <i class="bi bi-search me-2"></i>
+
+                        Discover learning activities
+
+                    </div>
+
+                    <div class="list-group-item px-0">
+
+                        <i class="bi bi-bookmark-check me-2"></i>
+
+                        Enrol in an activity
+
+                    </div>
+
+                    <div class="list-group-item px-0">
+
+                        <i class="bi bi-people me-2"></i>
+
+                        Join or create a team
+
+                    </div>
+
+                    <div class="list-group-item px-0">
+
+                        <i class="bi bi-kanban me-2"></i>
+
+                        Participate in a project
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-4 mt-4 mt-lg-0">
+
+            <div class="ycp-card">
+
+                <h5 class="fw-bold mb-3">
+                    Your Progress
+                </h5>
+
+                <div class="progress mb-3" style="height: 10px;">
+
+                    <div
+                        class="progress-bar"
+                        role="progressbar"
+                        style="width: 0%;"
+                    ></div>
+
+                </div>
+
+                <p class="text-muted mb-0">
+                    Your learning journey will appear here.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

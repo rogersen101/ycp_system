@@ -1,0 +1,111 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+{{ thread.title }} | YouthConnect Platform
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="mb-4">
+        <a
+            href="{% url 'learning:activity_detail' thread.activity.slug %}"
+            class="text-decoration-none"
+        >
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to activity
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+
+            <h1 class="h3 fw-bold">
+                {{ thread.title }}
+            </h1>
+
+            <p class="text-muted small">
+                Posted by {{ thread.author.full_name }}
+                on {{ thread.created_at|date:"d M Y, H:i" }}
+            </p>
+
+            <hr>
+
+            <div class="discussion-body">
+                {{ thread.body|linebreaks }}
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <h2 class="h4 fw-bold">
+            Replies ({{ replies.count }})
+        </h2>
+
+        {% for reply in replies %}
+
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between flex-wrap gap-2">
+                        <strong>
+                            {{ reply.author.full_name }}
+                        </strong>
+
+                        <small class="text-muted">
+                            {{ reply.created_at|date:"d M Y, H:i" }}
+                        </small>
+                    </div>
+
+                    <hr>
+
+                    {{ reply.body|linebreaks }}
+
+                </div>
+            </div>
+
+        {% empty %}
+
+            <div class="alert alert-light border">
+                No replies yet. Be the first to contribute.
+            </div>
+
+        {% endfor %}
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+
+            <h3 class="h5 fw-bold mb-3">
+                Add your reply
+            </h3>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    {{ form.body }}
+
+                    {% for error in form.body.errors %}
+                        <div class="text-danger small">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    <i class="bi bi-reply me-2"></i>
+                    Submit reply
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

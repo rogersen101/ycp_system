@@ -1,0 +1,223 @@
+{% extends "base/base.html" %}
+
+{% block title %}Create Account - YouthConnect{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8 col-xl-7">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0">
+                        <i class="bi bi-person-plus-fill me-2"></i>
+                        Create Your YouthConnect Account
+                    </h4>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <p class="text-muted mb-4">
+                        Register as a YouthConnect participant to access
+                        learning activities, projects, teams and other
+                        opportunities.
+                    </p>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" novalidate>
+
+                        {% csrf_token %}
+
+                        <div class="row">
+
+                            <!-- Full Name -->
+                            <div class="col-md-6 mb-3">
+
+                                <label
+                                    for="{{ form.full_name.id_for_label }}"
+                                    class="form-label"
+                                >
+                                    Full Name
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                {{ form.full_name }}
+
+                                {% for error in form.full_name.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+
+                            <!-- Email -->
+                            <div class="col-md-6 mb-3">
+
+                                <label
+                                    for="{{ form.email.id_for_label }}"
+                                    class="form-label"
+                                >
+                                    Email Address
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                {{ form.email }}
+
+                                {% for error in form.email.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+
+                            <!-- Country -->
+                            <div class="col-md-6 mb-3">
+
+                                <label
+                                    for="{{ form.country.id_for_label }}"
+                                    class="form-label"
+                                >
+                                    Country
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                {{ form.country }}
+
+                                {% for error in form.country.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+
+                            <!-- Date of Birth -->
+                            <div class="col-md-6 mb-3">
+
+                                <label
+                                    for="{{ form.date_of_birth.id_for_label }}"
+                                    class="form-label"
+                                >
+                                    Date of Birth
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                {{ form.date_of_birth }}
+
+                                <div class="form-text">
+                                    Participants must be between
+                                    18 and 35 years old.
+                                </div>
+
+                                {% for error in form.date_of_birth.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+
+                            <!-- Password -->
+                            <div class="col-md-6 mb-3">
+
+                                <label
+                                    for="{{ form.password1.id_for_label }}"
+                                    class="form-label"
+                                >
+                                    Password
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                {{ form.password1 }}
+
+                                <div class="form-text">
+                                    Use a strong password that is difficult
+                                    to guess.
+                                </div>
+
+                                {% for error in form.password1.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+
+                            <!-- Confirm Password -->
+                            <div class="col-md-6 mb-3">
+
+                                <label
+                                    for="{{ form.password2.id_for_label }}"
+                                    class="form-label"
+                                >
+                                    Confirm Password
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                {{ form.password2 }}
+
+                                {% for error in form.password2.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+
+                        <hr class="my-4">
+
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <a
+                                href="{% url 'accounts:login' %}"
+                                class="btn btn-outline-secondary"
+                            >
+                                <i class="bi bi-arrow-left me-1"></i>
+                                Back to Login
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                <i class="bi bi-person-plus me-1"></i>
+                                Create Account
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

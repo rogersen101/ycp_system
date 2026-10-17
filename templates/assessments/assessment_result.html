@@ -1,0 +1,79 @@
+ {% extends "base/base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-success text-white py-3">
+                    <h4 class="mb-0">
+                        <i class="bi bi-check-circle"></i>
+                        Assessment Result
+                    </h4>
+                </div>
+
+                <div class="card-body p-4">
+                    <h5 class="mb-3">
+                        {{ attempt.assessment.title }}
+                    </h5>
+
+                    <p class="text-muted">
+                        Attempt completed successfully.
+                    </p>
+
+                    <hr>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="border rounded p-3 h-100">
+                                <small class="text-muted d-block">
+                                    Attempt Status
+                                </small>
+                                <strong>
+                                    {{ attempt.get_status_display }}
+                                </strong>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="border rounded p-3 h-100">
+                                <small class="text-muted d-block">
+                                    Attempt Number
+                                </small>
+                                <strong>
+                                    {{ attempt.attempt_number }}
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if attempt.score is not None %}
+                    <div class="alert alert-info">
+                        <strong>Score:</strong>
+                        {{ attempt.score }}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning">
+                        Your assessment may still be awaiting grading.
+                    </div>
+                    {% endif %}
+
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{% url 'assessments:participant_assessment_dashboard' %}"
+                           class="btn btn-primary">
+                            Back to My Assessments
+                        </a>
+
+                        <a href="{% url 'dashboard' %}"
+                           class="btn btn-outline-secondary">
+                            Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,454 @@
+{% extends "base/base.html" %} {% block title %} {{ activity.title }} |
+YouthConnect Platform {% endblock %} {% block content %}
+
+<div class="container py-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'learning:activity_list' %}"> Learning Activities </a>
+      </li>
+
+      <li class="breadcrumb-item active">{{ activity.title }}</li>
+    </ol>
+  </nav>
+
+  <!-- Header -->
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="mb-3">
+            <span class="badge bg-primary"> {{ activity.category }} </span>
+
+            <span class="badge bg-secondary">
+              {{ activity.get_level_display }}
+            </span>
+
+            <span class="badge bg-info text-dark">
+              {{ activity.get_modality_display }}
+            </span>
+          </div>
+
+          <h1 class="fw-bold">{{ activity.title }}</h1>
+
+          <p class="lead text-muted">{{ activity.description }}</p>
+        </div>
+
+        <div class="col-lg-4 mt-4 mt-lg-0">
+          <div class="card bg-light border-0">
+            <div class="card-body">
+              <h5 class="fw-bold mb-3">Activity Information</h5>
+
+              <div class="mb-3">
+                <i class="bi bi-person-fill"></i>
+
+                <strong>Facilitator</strong>
+
+                <br />
+
+                <span class="ms-4"> {{ activity.facilitator.full_name }} </span>
+              </div>
+
+              <div class="mb-3">
+                <i class="bi bi-calendar-event"></i>
+
+                <strong>Starts</strong>
+
+                <br />
+
+                <span class="ms-4">
+                  {{ activity.start_date|date:"d M Y, H:i" }}
+                </span>
+              </div>
+
+              <div class="mb-3">
+                <i class="bi bi-calendar-check"></i>
+
+                <strong>Ends</strong>
+
+                <br />
+
+                <span class="ms-4">
+                  {{ activity.end_date|date:"d M Y, H:i" }}
+                </span>
+              </div>
+
+              <div class="mb-3">
+                <i class="bi bi-translate"></i>
+
+                <strong>Language</strong>
+
+                <br />
+
+                <span class="ms-4"> {{ activity.language }} </span>
+              </div>
+
+              {% if activity.country %}
+
+              <div class="mb-3">
+                <i class="bi bi-globe"></i>
+
+                <strong>Country</strong>
+
+                <br />
+
+                <span class="ms-4"> {{ activity.country }} </span>
+              </div>
+
+              {% endif %} {% if activity.location %}
+
+              <div class="mb-3">
+                <i class="bi bi-geo-alt"></i>
+
+                <strong>Location</strong>
+
+                <br />
+
+                <span class="ms-4"> {{ activity.location }} </span>
+              </div>
+
+              {% endif %}
+
+              <hr />
+
+              <div class="d-flex justify-content-between mb-2">
+                <span> Enrolled </span>
+
+                <strong>
+                  {{ activity.enrolled_count }} / {{ activity.capacity }}
+                </strong>
+              </div>
+
+              <div class="progress mb-3" style="height: 10px">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  style="width:
+                                        {% widthratio activity.enrolled_count activity.capacity 100 %}%"
+                ></div>
+              </div>
+
+              {% if activity.is_full %}
+
+              <button class="btn btn-secondary w-100" disabled>
+                <i class="bi bi-x-circle"></i>
+                Activity Full
+              </button>
+
+              {% else %}
+
+              <div class="alert alert-success mb-0">
+                <i class="bi bi-check-circle"></i>
+
+                {{ activity.available_spaces }} spaces available
+              </div>
+
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Main Content -->
+    <div class="col-lg-8">
+      <!-- Learning Outcomes -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-dark text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-bullseye"></i>
+            Learning Outcomes
+          </h4>
+        </div>
+
+        <div class="card-body">{{ activity.learning_outcomes|linebreaks }}</div>
+      </div>
+
+      <!-- Description -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-dark text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-info-circle"></i>
+            About This Activity
+          </h4>
+        </div>
+
+        <div class="card-body">{{ activity.description|linebreaks }}</div>
+      </div>
+
+      <!-- Learning Materials -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 fw-bold mb-0">Learning Materials</h2>
+            {% if user.is_authenticated %}
+    {% if user.is_staff or user.is_superuser or activity.facilitator_id == user.pk %}
+        <a
+            href="{% url 'learning:manage_materials' activity.slug %}"
+            class="btn btn-outline-primary mb-3"
+        >
+            <i class="bi bi-folder2-open me-2"></i>
+            Manage Learning Materials
+        </a>
+    {% endif %}
+{% endif %} 
+<hr>
+{% if user.is_superuser or user.is_staff or activity.facilitator_id == user.pk %}
+    <a
+        href="{% url 'assessments:assessment_list' activity.slug %}"
+        class="btn btn-outline-primary"
+    >
+        <i class="bi bi-clipboard-check me-2"></i>
+        Manage Assessments
+    </a>
+{% endif %}
+{% if enrolment and enrolment.status == "ACTIVE" %}
+    <a href="{% url 'assessments:participant_assessment_list' activity.slug %}"
+       class="btn btn-primary">
+        View Assessments
+    </a>
+{% endif %}
+
+            <span class="badge text-bg-secondary">
+              {{ materials|length }} resources
+            </span>
+          </div>
+
+          {% for material in materials %}
+
+          <div class="d-flex align-items-start gap-3 py-3 border-bottom">
+            <div class="fs-4 text-primary">
+              {% if material.material_type == "text" %}
+              <i class="bi bi-file-text"></i>
+              {% elif material.material_type == "document" %}
+              <i class="bi bi-file-earmark-pdf"></i>
+              {% elif material.material_type == "image" %}
+              <i class="bi bi-image"></i>
+              {% elif material.material_type == "video" %}
+              <i class="bi bi-play-circle"></i>
+              {% else %}
+              <i class="bi bi-link-45deg"></i>
+              {% endif %}
+            </div>
+
+            <div class="flex-grow-1">
+              <h3 class="h6 fw-bold mb-1">{{ material.title }}</h3>
+
+              {% if material.description %}
+              <p class="text-muted small mb-2">{{ material.description }}</p>
+              {% endif %} {% if material.low_bandwidth %}
+              <span class="badge text-bg-success"> Low bandwidth </span>
+              {% endif %}
+
+              <div class="mt-2">
+                <a
+                  href="{% url 'learning:material_detail' material.pk %}"
+                  class="btn btn-sm btn-outline-primary"
+                >
+                  Open material
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {% empty %}
+
+          <p class="text-muted mb-0">
+            Learning materials will be published here by the facilitator.
+          </p>
+
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Discussion -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div
+            class="d-flex justify-content-between align-items-center gap-2 mb-3"
+          >
+            <h2 class="h5 fw-bold mb-0">Activity Discussions</h2>
+
+            <a
+              href="{% url 'learning:create_discussion' activity.slug %}"
+              class="btn btn-sm btn-primary"
+            >
+              <i class="bi bi-plus-circle me-1"></i>
+              Start discussion
+            </a>
+          </div>
+
+          {% for thread in discussion_threads %}
+
+          <div class="border-bottom py-3">
+            <h3 class="h6 fw-bold">
+              <a
+                href="{% url 'learning:discussion_detail' thread.pk %}"
+                class="text-decoration-none"
+              >
+                {{ thread.title }}
+              </a>
+            </h3>
+
+            <p class="text-muted small mb-2">
+              By {{ thread.author.full_name }} · {{ thread.created_at|date:"d M
+              Y, H:i" }}
+            </p>
+
+            <p class="mb-2">{{ thread.body|truncatewords:25 }}</p>
+
+            <a
+              href="{% url 'learning:discussion_detail' thread.pk %}"
+              class="small"
+            >
+              View discussion and replies
+            </a>
+          </div>
+
+          {% empty %}
+
+          <p class="text-muted mb-0">
+            No discussions yet. Start the first conversation.
+          </p>
+
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <div class="sticky-lg-top" style="top: 80px">
+          <div class="card shadow-sm border-0">
+            <div class="card-body">
+              <h5 class="fw-bold mb-3">Enrolment</h5>
+
+              <div class="mb-3">
+                <div class="d-flex justify-content-between">
+                  <span>Available spaces</span>
+                  <strong>
+                    {{ activity.available_spaces }} / {{ activity.capacity }}
+                  </strong>
+                </div>
+
+                <div class="progress mt-2" style="height: 8px">
+                  {% widthratio activity.enrolled_count activity.capacity 100 as
+                  percentage %}
+                  <div
+                    class="progress-bar"
+                    role="progressbar"
+                    style="width: {{ percentage }}%;"
+                  ></div>
+                </div>
+              </div>
+
+              {% if enrolment %} {% if enrolment.status == "active" %}
+
+              <div class="alert alert-success">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                You are currently enrolled in this activity.
+              </div>
+
+              {% if activity.withdrawal_cutoff > now %}
+              <form
+                method="post"
+                action="{% url 'learning:withdraw_activity' activity.slug %}"
+                onsubmit="
+                  return confirm(
+                    'Are you sure you want to withdraw from this activity?',
+                  );
+                "
+              >
+                {% csrf_token %}
+
+                <button type="submit" class="btn btn-outline-danger w-100">
+                  <i class="bi bi-box-arrow-left me-2"></i>
+                  Withdraw from Activity
+                </button>
+              </form>
+              {% else %}
+
+              <div class="alert alert-warning">
+                The withdrawal deadline has passed.
+              </div>
+
+              {% endif %} {% elif enrolment.status == "withdrawn" %}
+
+              <div class="alert alert-warning">
+                You previously withdrew from this activity.
+              </div>
+
+              {% if not activity.is_full %}
+
+              <form
+                method="post"
+                action="{% url 'learning:enrol_activity' activity.slug %}"
+              >
+                {% csrf_token %}
+
+                <button type="submit" class="btn btn-primary w-100">
+                  <i class="bi bi-arrow-repeat me-2"></i>
+                  Re-enrol
+                </button>
+              </form>
+
+              {% else %}
+
+              <button class="btn btn-secondary w-100" disabled>
+                Activity Full
+              </button>
+
+              {% endif %} {% elif enrolment.status == "completed" %}
+
+              <div class="alert alert-info">
+                <i class="bi bi-trophy-fill me-2"></i>
+                You have completed this activity.
+              </div>
+
+              {% endif %} {% else %} {% if activity.is_full %}
+
+              <button class="btn btn-secondary w-100" disabled>
+                <i class="bi bi-people-fill me-2"></i>
+                Activity Full
+              </button>
+
+              {% elif activity.has_ended %}
+
+              <button class="btn btn-secondary w-100" disabled>
+                Activity Ended
+              </button>
+
+              {% else %}
+
+              <form
+                method="post"
+                action="{% url 'learning:enrol_activity' activity.slug %}"
+              >
+                {% csrf_token %}
+
+                <button type="submit" class="btn btn-primary w-100">
+                  <i class="bi bi-person-plus-fill me-2"></i>
+                  Enrol Now
+                </button>
+              </form>
+
+              {% endif %} {% endif %}
+            </div>
+          </div>
+
+          <a
+            href="{% url 'learning:activity_list' %}"
+            class="btn btn-outline-secondary w-100 mt-3"
+          >
+            <i class="bi bi-arrow-left me-2"></i>
+            Back to Activities
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
+</div>

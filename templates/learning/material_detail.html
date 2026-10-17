@@ -1,0 +1,121 @@
+
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+        <div>
+            <h1 class="h3 mb-1">{{ material.title }}</h1>
+            {% if material.description %}
+                <p class="text-muted">{{ material.description }}</p>
+            {% endif %}
+        </div>
+
+        <a href="{% url 'learning:activity_detail' activity.slug %}"
+           class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to activity
+        </a>
+    </div>
+
+    <!-- RESOURCE BUTTONS: independent of material type -->
+    <div class="d-flex flex-wrap gap-2 mb-4">
+
+        {% if material.file and material.downloadable %}
+            <a href="{% url 'learning:download_material' material.pk %}"
+               class="btn btn-primary">
+                <i class="bi bi-download"></i>
+                Download attachment
+            </a>
+        {% endif %}
+
+        {% if material.external_url %}
+            <a href="{{ material.external_url }}"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="btn btn-success">
+                <i class="bi bi-box-arrow-up-right"></i>
+                Open external resource
+            </a>
+        {% endif %}
+
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            {% if material.material_type == "text" %}
+
+                {% if material.content %}
+                    <article class="learning-content">
+                        {{ material.content|linebreaks }}
+                    </article>
+                {% else %}
+                    <p class="text-muted">
+                        No text content has been provided.
+                    </p>
+                {% endif %}
+
+            {% elif material.material_type == "document" %}
+
+                {% if material.file %}
+                    <p>
+                        Document attached:
+                        <strong>{{ material.file.name|cut:"learning/materials/" }}</strong>
+                    </p>
+                {% else %}
+                    <div class="alert alert-warning">
+                        No document has been uploaded.
+                    </div>
+                {% endif %}
+
+            {% elif material.material_type == "image" %}
+
+                {% if material.file %}
+                    <p>
+                        Image attached:
+                        <strong>{{ material.file.name|cut:"learning/materials/" }}</strong>
+                    </p>
+                {% else %}
+                    <div class="alert alert-warning">
+                        No image has been uploaded.
+                    </div>
+                {% endif %}
+
+            {% elif material.material_type == "video" %}
+
+                {% if material.file %}
+                    <p>A video file is attached to this resource.</p>
+                {% elif material.external_url %}
+                    <p>Open the external video using the button above.</p>
+                {% else %}
+                    <div class="alert alert-warning">
+                        No video resource has been provided.
+                    </div>
+                {% endif %}
+
+            {% elif material.material_type == "link" %}
+
+                {% if material.external_url %}
+                    <p>
+                        Open the external learning resource using the
+                        button above.
+                    </p>
+                {% else %}
+                    <div class="alert alert-warning">
+                        No external learning link has been provided.
+                    </div>
+                {% endif %}
+
+            {% else %}
+
+                <div class="alert alert-warning">
+                    This material type is not supported.
+                </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}
