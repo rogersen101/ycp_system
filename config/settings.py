@@ -16,7 +16,7 @@ SECRET_KEY = "django-insecure-change-this-in-production"
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['ycp-system.onrender.com']
+ALLOWED_HOSTS = ['ycp-system.onrender.com','localhost','127.0.0.1']
 
 
 # ============================================================
